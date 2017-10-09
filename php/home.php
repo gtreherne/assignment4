@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+require('config.php');
+require('lib.php');
+
+$message = check_login();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,15 +16,19 @@
 <header>
 	<h1>COMP233 Multiple Choice Tests</h1>
 </header>
-You can view tests but not take them until you log in
 <nav>
 	<ul>
-		<li><a href="login.php">Log in</a></li>
-		<br>
-		<li><a href="test1.php">Test #1</a></li>
-		<li><a href="test2.php">Test #2</a></li>
-		<li><a href="test3.php">Test #3</a></li>
+		<li><a href="home.php">Home</a></li>
+        <br>
+        <?php echo get_tests(); ?>
 	</ul>
 </nav>
+<div class="content">
+	<?php if(empty($_SESSION["user_id"])) { ?>
+		<p>You can view tests but not take them until you <a href="/assignment4/php/login.php">log in</a></p>
+	<?php } else { ?>
+		<p>You are logged in</p>
+	<?php } ?>
+</div>
 </body>
 </html>

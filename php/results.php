@@ -11,7 +11,7 @@ $id = $conn->real_escape_string($_GET['id']);
 ?>
 <html>
 <head>
-    <title>Test</title>
+    <title>Results</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
@@ -26,10 +26,7 @@ $id = $conn->real_escape_string($_GET['id']);
     </ul>
 </nav>
 <div class="content">
-	<form method='POST' action='./results.php'>
-		<?php echo get_qanda($id);?>
-		<input type='submit'>
-	</form>
+	<?php echo get_results($id);?>
 </div>
 </body>
 </html>

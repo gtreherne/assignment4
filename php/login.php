@@ -1,21 +1,10 @@
 <?php
 session_start();
-$conn = mysqli_connect();
-	
-$message="";
-if(!empty($_POST["login"])) {
-	$result = mysqli_query($conn,"SELECT * FROM users WHERE username='" . $_POST["username"] . "' and password = '". $_POST["password"]."'");
-	$row  = mysqli_fetch_array($result);
-	if(is_array($row)) {
-	$_SESSION["user_id"] = $row['user_id'];
-	} else {
-	$message = "Invalid Username or Password!";
-	}
-}
-if(!empty($_POST["logout"])) {
-	$_SESSION["user_id"] = "";
-	session_destroy();
-}
+
+require('config.php');
+require('lib.php');
+$message = check_login();
+
 ?>
 <html>
 <head>
@@ -26,15 +15,6 @@ if(!empty($_POST["logout"])) {
     <header>
         <h1>COMP233 Multiple Choice Tests</h1>
     </header>
-    <nav>
-        <ul>
-            <li><a href="home.php">Home</a></li>
-            <br>
-            <li><a href="test1.php">Test #1</a></li>
-            <li><a href="test2.php">Test #2</a></li>
-            <li><a href="test3.php">Test #3</a></li>
-        </ul>
-    </nav>
 <?php if(empty($_SESSION["user_id"])) { ?>
 <form action="" method="post" id="login">
 	<div class="error-message"><?php if(isset($message)) { echo $message; } ?></div>
@@ -47,15 +27,20 @@ if(!empty($_POST["logout"])) {
 </form>
 <?php 
 } else { 
-$result = mysqlI_query($conn,"SELECT * FROM users WHERE user_id='" . $_SESSION["user_id"] . "'");
+$result = mysqli_query($conn,"SELECT * FROM users WHERE id='" . $_SESSION["user_id"] . "'");
 $row  = mysqli_fetch_array($result);
 ?>
 <form action="" method="post" id="logout">
-<div class="member-dashboard">Welcome <?php echo ucwords($row['display_name']); ?>, You have successfully logged in!<br>
-Click to <input type="submit" name="logout" value="Logout" class="logout-button">.</div>
+	<div class="member-dashboard">Welcome <?php echo ucwords($row['given_name']); ?>, You have successfully logged in!<br>
+Click to <input type="submit" name="logout" value="Logout" class="logout-button"></div>
 </form>
-</div>
-</div>
+<nav>
+    <ul>
+        <li><a href="home.php">Home</a></li>
+        <br>
+        <?php echo get_tests(); ?>
+    </ul>
+</nav>
 <?php } ?>
 </body>
 </html>
